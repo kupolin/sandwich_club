@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         starts a detail activity for a an item in the list of sandwiches.
         @param int position: item position in list
      */
+
     private void launchDetailActivity(int position) {
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(DetailActivity.EXTRA_POSITION, position);

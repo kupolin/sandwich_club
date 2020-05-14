@@ -22,7 +22,7 @@ public class DetailActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_detail);
 
-        // sandwich IV
+        // sandwich IV SET iN POPULATE VIEW AT THE BOTTOM
         ImageView ingredientsIv = findViewById(R.id.image_iv);
 
         Intent intent = getIntent();
@@ -32,37 +32,26 @@ public class DetailActivity extends AppCompatActivity {
 
         //get item position in sandwich list
         int position = intent.getIntExtra(EXTRA_POSITION, DEFAULT_POSITION);
-            /*
+
         if (position == DEFAULT_POSITION) {
             // EXTRA_POSITION not found in intent
             closeOnError();
             return;
         }
-*/
         // get current sandwich detail json string
         String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
+
         String json = sandwiches[position];
-
-        ((TextView)findViewById(R.id.textView)).setText(json);
-
-
         Sandwich sandwich = JsonUtils.parseSandwichJson(json);
 
-        /*
         if (sandwich == null) {
             // Sandwich data unavailable
             closeOnError();
             return;
         }
-         */
 
         //updates UI
-        populateUI();
-//        Picasso.with(this)
-//            .load(sandwich.getImage())
-//            .into(ingredientsIv);
-
-//          setTitle(sandwich.getMainName());
+        populateUI(sandwich);
     }
 
     private void closeOnError() {
@@ -70,11 +59,27 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-
     /*
         updates UI with model's details
      */
-    private void populateUI() {
+    private void populateUI(Sandwich model) {
+        setTitle(model.getMainName());
 
+        TextView tv = findViewById(R.id.origin_tv);
+        tv.setText(model.getPlaceOfOrigin());
+
+        tv = findViewById(R.id.description_tv);
+        tv.setText(model.getDescription());
+
+        ImageView iv = findViewById(R.id.image_iv);
+        // library to get images from the web.
+        // into(ImageView ) sets url to ImageView for you
+        Picasso.with(this).load(model.getImage()).into(iv);
+
+        tv = findViewById(R.id.also_known_tv);
+        tv.setText(model.getAlsoKnownAs().toString().replace("[", "").replace("]", ""));
+
+        tv = findViewById(R.id.ingredients_tv);
+        tv.setText(model.getIngredients().toString().replace("[", "").replace("]", ""));
     }
 }
